@@ -68,3 +68,19 @@ func UpdateButton(whichButton string, newButton string) string { // будет �
 	return "Обновили кнопку: " + whichButton + " На: " + newButton
 
 }
+
+func UpdateDescriptionButton(button string, description string) string { //Добавить возможность добовлять описание кнопок
+	database, err := sql.Open("sqlite3", "./info.db")
+	if err != nil {
+		fmt.Printf("Ошибка подключение в AddDescriptionButton  %s \n", err)
+	}
+	defer database.Close()
+	if err != nil {
+		fmt.Printf("Ошибка добавление кнопокв в AddDescriptionButton в   %s \n", err)
+	}
+	result, errorka := database.Exec("UPDATE bani SET description=? WHERE buttun=?", description, button) // пока пойдет и эта часть потом обновим если надобу дет
+	fmt.Printf("\n Результат запроса такой %s. А вот ошибка такая  %s ", result, errorka)
+	return "Успешно добавили описание к кнопке проверяй"
+}
+
+//TODO Добавить возможность добавлять фоток к кнопке

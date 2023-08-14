@@ -20,7 +20,7 @@ func Info(data []string) {
 func main() {
 	dbcreate.СreateTable()
 	//Тут создаем набор команд он часто вызывается будет как константа
-	comandsall := []string{"Меню:", "Добавить:", "Удалить кнопку:", "Удалить всё", "Обновить кнопку:", "Команды"}
+	comandsall := []string{"Меню:", "Добавить описание кнопки:", "Добавить кнопку:", "Удалить кнопку:", "Удалить всё", "Обновить кнопку:", "Команды:"}
 
 	// тест здесь будут функции и команды которые приходят иметация стайтд машин ? Ну попробуем
 	var stagekomand string          // будет пустая команда если заполнена будем её затирать если используем
@@ -56,6 +56,19 @@ func main() {
 			msg.Text = drop
 			comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
 			msg.ReplyMarkup = comands
+		case "Добавить описание кнопки:":
+			if stagenameButtonTheUp == "" { // если название еще не ввели то мы запрашиваем кнопку А вот если ввели ниже
+				stagenameButtonTheUp = update.Message.Text // пишем какую кнопку будем обновлять
+				msg.Text = "Пришлите описание кнопки"
+			} else { // а вот если ввели то мы формируем простой запрос из пердыдущей и новой кнопки а так же очищаем наше "Состояние" Чтобы прога работала заново
+				answer := dbupdate.UpdateDescriptionButton(stagenameButtonTheUp, update.Message.Text)
+				comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
+				msg.ReplyMarkup = comands
+				msg.Text = answer
+				//а теперь очистим наши состояния
+				stagekomand, stagenameButtonTheUp = "", "" // просто сделали их пустыми =)
+
+			}
 
 		case "Обновить кнопку:":
 			if stagenameButtonTheUp == "" { // если название еще не ввели то мы запрашиваем кнопку А вот если ввели ниже
@@ -75,16 +88,17 @@ func main() {
 		//TODO Осталоь понять куда её засунуть =) вначале или в конце хммм
 		check_button := dbgive.CheckingdbButton(update.Message.Text)
 		if check_button == true {
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "TRUE") // для отправки копии смс
-			if _, err := bot.Send(msg); err != nil {
-				fmt.Println(err)
-			}
+			resultDeascription := dbgive.GiveDescriptionButton(update.Message.Text)
+			msg.Text = resultDeascription + "вот и описание"
+
 		}
+
 		switch update.Message.Text { //для проверки пришедших команд смсок точнее ну будем дальше смотреть
 		case "Меню:":
 			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase()))
 			msg.ReplyMarkup = buttonBase
 			msg.Text = "Показываю доступное меню"
+			stagekomand, stagenameButtonTheUp = "", "" // просто сделали их пустыми =)
 		case "Добавить:":
 			stagekomand = "Добавить:"
 			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase()))
@@ -107,13 +121,17 @@ func main() {
 			//itog := dbdrop.DropOneButton(vartext)
 			stagekomand = "Обновить кнопку:"
 			msg.Text = "Какую кнопку обновим?" // передаю инфу в текст
+		case "Добавить описание кнопки:":
+			stagekomand = "Добавить описание кнопки:"
+			msg.Text = "К какой кнопке добавим описание?"
+			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase()))
+			msg.ReplyMarkup = buttonBase
 		case "Команды:": // будет выводить список команд доступных чтобы не писать кнопки каждый раз вручную
 			{
 				comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
 				msg.ReplyMarkup = comands
 				msg.Text = "Вот доступные команды:"
 			}
-
 		}
 
 		if _, err := bot.Send(msg); err != nil {

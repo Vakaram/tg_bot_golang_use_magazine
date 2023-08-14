@@ -63,3 +63,29 @@ func CheckingdbButton(buttonrequest string) bool { // проверяет в ба
 }
 
 //TODO Нужно сделать запрос который будет возвращать и формировать ответ по кнопке если она есть в бд Сформировать просто ответ крутой  discription and photo
+//TODO и надо делать проверку на ошибку если фоток нет чтобы прога не падала
+
+func GiveDescriptionButton(buttonsearch string) string { // пока будем получать просто описание
+	database, err := sql.Open("sqlite3", "./info.db")
+	var descriptionitog []string
+	if err != nil {
+		fmt.Printf("Ошибка в giveButton %s \n", err)
+	}
+	fmt.Printf("БАЗА %T \n", database)
+
+	result, errorka := database.Query("SELECT description FROM bani WHERE buttun=?", buttonsearch) // пока пойдет и эта часть потом обновим если надобу дет
+
+	var decriptionval string
+	for result.Next() {
+		result.Scan(&decriptionval)
+		descriptionitog = append(descriptionitog, decriptionval)
+	}
+	stringitog := descriptionitog[0]
+
+	fmt.Printf("%s ВООООТ запрос по БД прошлись вижу вот", descriptionitog)
+
+	fmt.Printf("\n Результат запроса такой %s. А вот ошибка такая  %s ", result, errorka)
+
+	defer database.Close()
+	return stringitog // если true выше не отработает то вернуть нилл
+}
