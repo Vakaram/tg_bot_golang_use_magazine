@@ -61,3 +61,5 @@ func CheckingdbButton(buttonrequest string) bool { // проверяет в ба
 	return false // если true выше не отработает то вернуть нилл
 
 }
+
+//TODO Нужно сделать запрос который будет возвращать и формировать ответ по кнопке если она есть в бд Сформировать просто ответ крутой  discription and photo

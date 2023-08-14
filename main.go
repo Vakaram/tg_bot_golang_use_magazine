@@ -19,7 +19,8 @@ func Info(data []string) {
 }
 func main() {
 	dbcreate.СreateTable()
-	//будем отправлять смс типо да хорошо добавьте кнопку =)
+	//Тут создаем набор команд он часто вызывается будет как константа
+	comandsall := []string{"Меню:", "Добавить:", "Удалить кнопку:", "Удалить всё", "Обновить кнопку:", "Команды"}
 
 	// тест здесь будут функции и команды которые приходят иметация стайтд машин ? Ну попробуем
 	var stagekomand string          // будет пустая команда если заполнена будем её затирать если используем
@@ -41,21 +42,21 @@ func main() {
 		}
 		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Такой команды нет") // для отправки копии смс
 
-		//TODO сделать проверку вначале на есть ли такая кнопка в меню как бы регируем на запросы пользователей
-
-		check_button := dbgive.CheckingdbButton(update.Message.Text)
-		if check_button == true {
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "TRUE") // для отправки копии смс
-			if _, err := bot.Send(msg); err != nil {
-				fmt.Println(err)
-			}
-		}
-
 		switch stagekomand { //для проверки пришедших команд смсок точнее ну будем дальше смотреть
 		case "Добавить:":
 			stagekomand = ""
 			itog := dbadd.AddButton(update.Message.Text) //что передадим в добавить?
-			msg.Text = itog                              // передаю инфу в текст
+			msg.Text = itog
+			comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
+			msg.ReplyMarkup = comands
+		case "Удалить кнопку:":
+			stagekomand = "" // удаляем состояние
+			//пердаем название кнопки для удаления
+			drop := dbdrop.DropOneButton(update.Message.Text)
+			msg.Text = drop
+			comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
+			msg.ReplyMarkup = comands
+
 		case "Обновить кнопку:":
 			if stagenameButtonTheUp == "" { // если название еще не ввели то мы запрашиваем кнопку А вот если ввели ниже
 				stagenameButtonTheUp = update.Message.Text // пишем какую кнопку будем обновлять
@@ -65,49 +66,53 @@ func main() {
 				msg.Text = answer
 				//а теперь очистим наши состояния
 				stagekomand, stagenameButtonTheUp = "", "" // просто сделали их пустыми =)
+				comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
+				msg.ReplyMarkup = comands
 			}
 
 		}
-
-		//if strings.HasPrefix(update.Message.Text, "Удалить кнопку:") { // удаляет кнопку
-		//	vartext := update.Message.Text[28:]
-		//	itog := dbdrop.DropOneButton(vartext)
-		//	msg.Text = itog // передаю инфу в текст
-		//
-		//	fmt.Printf("я зашел в удалить кнопку текст такой:%s \n", vartext)
-		//}
-
-		//if strings.HasPrefix(update.Message.Text, "Удалить всё") {
-		//	msg.Text = "Удалили данные"
-		//	dbdrop.DropAllTableBani()
-		//
-		//}
-
+		//TODO сделать проверку вначале на есть ли такая кнопка в меню как бы регируем на запросы пользователей
+		//TODO Осталоь понять куда её засунуть =) вначале или в конце хммм
+		check_button := dbgive.CheckingdbButton(update.Message.Text)
+		if check_button == true {
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "TRUE") // для отправки копии смс
+			if _, err := bot.Send(msg); err != nil {
+				fmt.Println(err)
+			}
+		}
 		switch update.Message.Text { //для проверки пришедших команд смсок точнее ну будем дальше смотреть
-		case "open":
-			fmt.Println("сейчас выдам кнопки")
+		case "Меню:":
 			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase()))
 			msg.ReplyMarkup = buttonBase
-		case "close":
-			msg.ReplyMarkup = tgbotapi.NewRemoveKeyboard(true)
+			msg.Text = "Показываю доступное меню"
 		case "Добавить:":
 			stagekomand = "Добавить:"
+			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase()))
+			msg.ReplyMarkup = buttonBase
 			vartext := "Напишите название кнопки"
 			msg.Text = vartext
 		case "Удалить кнопку:":
-			vartext := update.Message.Text[28:]
-			itog := dbdrop.DropOneButton(vartext)
-			msg.Text = itog // передаю инфу в текст
-			fmt.Printf("я зашел в удалить кнопку текст такой:%s \n", vartext)
+			stagekomand = "Удалить кнопку:"
+			msg.Text = "Какую кнопку удалить?"                                                        // отправлем смс
+			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase())) // отправляем меню для удаления
+			msg.ReplyMarkup = buttonBase
 		case "Удалить всё":
 			msg.Text = "Удалили данные"
 			dbdrop.DropAllTableBani()
+			comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
+			msg.ReplyMarkup = comands
 		case "Обновить кнопку:":
 			// обновляет значения кнопки
 			//vartext := update.Message.Text[28:]
 			//itog := dbdrop.DropOneButton(vartext)
 			stagekomand = "Обновить кнопку:"
-			msg.Text = "Какую кнопку обновим? " // передаю инфу в текст
+			msg.Text = "Какую кнопку обновим?" // передаю инфу в текст
+		case "Команды:": // будет выводить список команд доступных чтобы не писать кнопки каждый раз вручную
+			{
+				comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
+				msg.ReplyMarkup = comands
+				msg.Text = "Вот доступные команды:"
+			}
 
 		}
 
