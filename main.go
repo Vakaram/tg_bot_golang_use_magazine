@@ -5,7 +5,11 @@ import (
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/sirupsen/logrus"
+	_ "github.com/sirupsen/logrus"
 	"log"
+	"os"
+	"strconv"
 	btcreate "tg_bot_golang/createbutton"
 	dbadd "tg_bot_golang/db/adddate"
 	dbcreate "tg_bot_golang/db/createdb"
@@ -18,13 +22,70 @@ func Info(data []string) {
 	fmt.Printf("%s получаю из получение кнопок", data)
 }
 func main() {
-	dbcreate.СreateTable()
+	// настраиваем логгер думаю нужно будет перенести это в функцию
+	// Создаем файл для записи логов
+	file, err := os.OpenFile("logfile.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	// Создаем новый логгер Logrus
+	logger := logrus.New()
+
+	// Устанавливаем выходной поток для логгера на созданный файл
+	logger.SetOutput(file)
+
+	// Теперь можно использовать методы логгера, такие как Info, Warn, Error и т. д.,
+	// для записи данных в файл
+	logger.Info("Это мы запустили бота или перезапустили =) ")
+	//logger.Warn("Это предупреждение в лог-файле с использованием Logrus")
+
+	///////////////////
+
+	const chiefadminBot string = "1484570227" // эта запись нужна для телеграм бота чтобы так добавился главный администратор который моэет добавлять других администраторов
+
+	dbcreate.СreatemyDb() // создаем нашу базу на новом месте =)
+	dbcreate.СreateDbGreetings()
+	dbcreate.СreateDBAdministrators(chiefadminBot)
+
 	//Тут создаем набор команд он часто вызывается будет как константа
-	comandsall := []string{"Меню:", "Добавить описание кнопки:", "Добавить кнопку:", "Удалить кнопку:", "Удалить всё", "Обновить кнопку:", "Команды:"}
+	var comands = tgbotapi.NewReplyKeyboard(
+		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton("Меню"),
+			tgbotapi.NewKeyboardButton("Команды"),
+			tgbotapi.NewKeyboardButton("Удалить всю базу"),
+		),
+		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton("Добавить кнопку"),
+			tgbotapi.NewKeyboardButton("Добавить описание"),
+			tgbotapi.NewKeyboardButton("Удалить кнопку"),
+		),
+		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton("Обновить название"),
+			tgbotapi.NewKeyboardButton("Добавить фото к кнопке"),
+			tgbotapi.NewKeyboardButton("Удалить все фото для кнопки"),
+		),
+		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton("Стоп"),
+			tgbotapi.NewKeyboardButton("Добавить приветствие"), // это так же работает как обновление
+		),
+		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton("Добавить администратора"), // это так же работает как обновление
+			tgbotapi.NewKeyboardButton("Удалить администратора"),  // это так же работает как обновление
+		),
+	)
+
+	var yesNo = tgbotapi.NewReplyKeyboard(
+		tgbotapi.NewKeyboardButtonRow(
+			tgbotapi.NewKeyboardButton("Да"),
+			tgbotapi.NewKeyboardButton("Нет"),
+		),
+	)
 
 	// тест здесь будут функции и команды которые приходят иметация стайтд машин ? Ну попробуем
-	var stagekomand string          // будет пустая команда если заполнена будем её затирать если используем
-	var stagenameButtonTheUp string // типа тут мы обновим кнопку на это навание
+	var stagekomand string          // будет пустая команда если заполнена будем её затирать если используем // для машин стостояния
+	var stagenameButtonTheUp string // типа тут мы обновим кнопку на это навание // для id
 
 	bot, err := tgbotapi.NewBotAPI("5975063523:AAFagQJfXf3z-zgA0JjHPusoGhjjXIYOyEI")
 	if err != nil {
@@ -33,109 +94,260 @@ func main() {
 	bot.Debug = true
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
+	u.Timeout = 20 // сколько будем ждать запрос ?
 	updates := bot.GetUpdatesChan(u)
 
-	for update := range updates {
+	for update := range updates { // тут начинмется работа бота
 		if update.Message == nil { // ignore non-Message updates
 			continue
 		}
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Такой команды нет") // для отправки копии смс
+		logger.Info("Такое сообщение нам прислали: " + "'" + update.Message.Text + "'" + " Nick: " + update.Message.From.UserName + " ID : " + strconv.Itoa(int(update.Message.From.ID)))
 
-		switch stagekomand { //для проверки пришедших команд смсок точнее ну будем дальше смотреть
-		case "Добавить:":
-			stagekomand = ""
-			itog := dbadd.AddButton(update.Message.Text) //что передадим в добавить?
-			msg.Text = itog
-			comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
-			msg.ReplyMarkup = comands
-		case "Удалить кнопку:":
-			stagekomand = "" // удаляем состояние
-			//пердаем название кнопки для удаления
-			drop := dbdrop.DropOneButton(update.Message.Text)
-			msg.Text = drop
-			comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
-			msg.ReplyMarkup = comands
-		case "Добавить описание кнопки:":
-			if stagenameButtonTheUp == "" { // если название еще не ввели то мы запрашиваем кнопку А вот если ввели ниже
-				stagenameButtonTheUp = update.Message.Text // пишем какую кнопку будем обновлять
-				msg.Text = "Пришлите описание кнопки"
-			} else { // а вот если ввели то мы формируем простой запрос из пердыдущей и новой кнопки а так же очищаем наше "Состояние" Чтобы прога работала заново
-				answer := dbupdate.UpdateDescriptionButton(stagenameButtonTheUp, update.Message.Text)
-				comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
+		// TODO делаю проверку на админа
+		//тут получаем всех админов и делаем сравнение с ними
+		admins := dbgive.GiveDBAdministratorsIDAdmin()
+		fmt.Printf("Вот что получаю из базы админов : %s\n", admins[0])
+		userID := update.Message.From.ID
+		reallyAdmin := false
+		for _, value := range admins {
+			if value == strconv.Itoa(int(userID)) {
+				reallyAdmin = true
+			}
+		}
+		fmt.Printf("Реально ли это админ ?:  %t \n", reallyAdmin)
+
+		if reallyAdmin == true {
+
+			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase())) // формирует меню из кнопок базы которые увидит клиент //Важно что каждый раз нужно проверять в каждом сообщение
+
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Программа отвечает") // для отправки копии смс
+
+			switch stagekomand { //для проверки пришедших команд смсок точнее ну будем дальше смотреть
+			case "Добавить кнопку":
+				stagekomand = ""
+				itog := dbadd.AddButton(update.Message.Text) //что передадим в добавить?
+				msg.Text = itog
 				msg.ReplyMarkup = comands
-				msg.Text = answer
-				//а теперь очистим наши состояния
+			case "Удалить кнопку":
+				stagekomand = "" // удаляем состояние
+				//пердаем название кнопки для удаления
+				drop := dbdrop.DropOneButton(update.Message.Text)
+				msg.Text = drop
+				msg.ReplyMarkup = comands
+			case "Добавить приветствие":
+				stagekomand = "" // удаляем состояние
+				//пердаем новое приветствие в бд
+				//TODO // вот тут будет функция update для приветсвтия
+				updateData := dbupdate.UpdateDbGreetings(update.Message.Text)
+				if updateData != "" {
+					msg.Text = updateData
+					msg.ReplyMarkup = comands
+				} else {
+					msg.Text = "данные не удалось обновить" // пока просто как пример но надо будет делать обновления дла баз данных как то смотреть а добавились ли данные
+					msg.ReplyMarkup = comands
+
+				}
+			case "Удалить все фото для кнопки":
+				stagekomand = ""
+				// тут должна быть функцию удаления
+				//TODO кнопка у которой будем удалять функция
+				dropPhotoAll := dbdrop.DropAllPhotoButton(update.Message.Text)
+				msg.Text = dropPhotoAll
+				msg.ReplyMarkup = comands
+			case "Удалить всю базу":
+				if update.Message.Text == "Да" { // если название еще не ввели то мы запрашиваем кнопку А вот если ввели ниже
+					dbdrop.DropAllTablemyDb()
+					msg.Text = "Удалили базу"
+					msg.ReplyMarkup = comands
+				} else {
+					stagekomand = ""
+					msg.Text = "Отменили удаление базы"
+					msg.ReplyMarkup = comands
+				}
+			case "Добавить описание":
+				if stagenameButtonTheUp == "" { // если название еще не ввели то мы запрашиваем кнопку А вот если ввели ниже
+					stagenameButtonTheUp = update.Message.Text // пишем какую кнопку будем обновлять
+					msg.Text = dbgive.GiveDescriptionButton(stagenameButtonTheUp) + "\n" + "Пришлите описание кнопки"
+
+				} else { // а вот если ввели то мы формируем простой запрос из пердыдущей и новой кнопки а так же очищаем наше "Состояние" Чтобы прога работала заново
+					answer := dbupdate.UpdateDescriptionButton(stagenameButtonTheUp, update.Message.Text)
+					msg.ReplyMarkup = comands
+					msg.Text = answer
+					//а теперь очистим наши состояния
+					stagekomand, stagenameButtonTheUp = "", "" // просто сделали их пустыми =)
+				}
+			case "Добавить администратора":
+				if stagenameButtonTheUp == "" { // если название еще не ввели то мы запрашиваем кнопку А вот если ввели ниже
+					stagenameButtonTheUp = update.Message.Text // сюда мы записали id нового админа дальше будем писать
+					msg.Text = "Теперь пришлите имя вашего администратора для вашего удобства"
+				} else { // а вот если ввели то мы формируем простой запрос из пердыдущей и новой кнопки а так же очищаем наше "Состояние" Чтобы прога работала заново
+					answer := dbadd.AddAdmin(stagenameButtonTheUp, update.Message.Text)
+					msg.ReplyMarkup = comands
+					msg.Text = answer
+					//а теперь очистим наши состояния
+					stagekomand, stagenameButtonTheUp = "", "" // просто сделали их пустыми =) чтобы очистить машинное состояние
+				}
+			case "Удалить администратора":
+				whydrpop := dbdrop.DropOneAdmin(update.Message.Text)
+				msg.Text = whydrpop
+			case "Добавить фото к кнопке":
+				if stagenameButtonTheUp == "" { // если название еще не ввели то мы запрашиваем кнопку А вот если ввели ниже
+					stagenameButtonTheUp = update.Message.Text // пишем какую кнопку будем обновлять eё передадим в функцию
+					msg.Text = "Пришлите фото для кнопки, добавлять можно только по одному фото"
+				} else {
+					msg.ReplyMarkup = comands
+					sendfunk := dbupdate.UpdateAddPhotoInButton(stagenameButtonTheUp, update.Message.Photo[3].FileID) // передает файл ид лучшего качества
+					msg.Text = sendfunk
+					stagekomand, stagenameButtonTheUp = "", "" // просто сделали их пустыми =)
+				}
+			case "Обновить название для кнопки":
+				if stagenameButtonTheUp == "" { // если название еще не ввели то мы запрашиваем кнопку А вот если ввели ниже
+					stagenameButtonTheUp = update.Message.Text // пишем какую кнопку будем обновлять
+					msg.Text = "Осталось написать новое название кнопки"
+				} else { // а вот если ввели то мы формируем простой запрос из пердыдущей и новой кнопки а так же очищаем наше "Состояние" Чтобы прога работала заново
+					answer := dbupdate.UpdateButton(stagenameButtonTheUp, update.Message.Text)
+					msg.Text = answer
+					//а теперь очистим наши состояния
+					stagekomand, stagenameButtonTheUp = "", "" // просто сделали их пустыми =)
+					msg.ReplyMarkup = comands
+				}
+			}
+			//TODO сделать проверку вначале на есть ли такая кнопка в меню как бы регируем на запросы пользователей
+			//TODO Осталоь понять куда её засунуть =) вначале или в конце хммм
+
+			if stagekomand == "" {
+				check_button := dbgive.CheckingdbButton(update.Message.Text) // эта часть отвечает за поиск информации за кнопку если есть вернем тру
+				if check_button == true {
+					//TODO // чет вроде эта часть сломалась надо проверить
+					resultDeascription := dbgive.GiveDescriptionButton(update.Message.Text)
+					if resultDeascription != "" {
+						arr := dbgive.GivePhotoButton(update.Message.Text, resultDeascription)
+						if arr == nil {
+							msg.Text = resultDeascription
+							return
+						}
+						bot.Send(tgbotapi.NewMediaGroup(update.Message.Chat.ID, arr))
+					} else {
+						resultDeascription = "Нет описания и нет фото для этой кнопки"
+						msg.Text = resultDeascription
+					}
+
+				}
+			}
+
+			switch update.Message.Text { // если есть совпадение команды мы делаем стейт машин =)
+
+			case "Меню":
+				isEmpty := len(buttonBase.Keyboard) == 0 // выдает ошибку считай но выше хммм
+				var textInMenu string
+				if isEmpty {
+					textInMenu = "Пока здесь нет меню, оно скоро появится" // если пусто то вот это отрпавим
+				} else {
+					textInMenu = "Показываю меню"
+					msg.ReplyMarkup = buttonBase
+				}
+				msg.Text = textInMenu
+
+				//msg.ReplyMarkup = buttonBase
 				stagekomand, stagenameButtonTheUp = "", "" // просто сделали их пустыми =)
+			case "Добавить кнопку":
+				stagekomand = "Добавить кнопку"
+				vartext := "Напишите название кнопки"
+				msg.Text = vartext
+			case "Стоп":
+				stagekomand = ""
+				stagenameButtonTheUp = "" // очистили машинное состояние
+				vartext := "Отменили и очистили ввод данных"
+				msg.Text = vartext
+			case "Добавить администратора":
+				stagekomand = "Добавить администратора"
+				vartext := "Пришлите id администратор"
+				msg.Text = vartext
+			case "Удалить администратора":
+				stagekomand = "Удалить администратора"
+				//Todo тут нужно отсылать администраторов и текст что для удаления пришлите цифру id администратора для удаления
+				vartext := dbgive.GiveDBAdministratorsPrimaryKeyIDAdmiName() + "Пришлите № администратор для удаления"
+				msg.Text = vartext
+			case "Удалить кнопку":
+				stagekomand = "Удалить кнопку"
+				msg.Text = "Какую кнопку удалить?" // отправлем смс
+				msg.ReplyMarkup = buttonBase
+			case "Удалить всю базу":
+				msg.Text = "Вы уверены?"
+				stagekomand = "Удалить всю базу"
+				msg.ReplyMarkup = yesNo
+			case "Обновить название для кнопки":
+				// обновляет значения кнопки
+				stagekomand = "Обновить название для кнопки"
+				msg.ReplyMarkup = buttonBase
+				msg.Text = "Какую кнопку обновим?" // передаю инфу в текст
+			case "Добавить описание":
+				stagekomand = "Добавить описание"
+				msg.Text = "К какой кнопке добавим описание?"
+				msg.ReplyMarkup = buttonBase
+			case "Добавить фото к кнопке":
+				stagekomand = "Добавить фото к кнопке"
+				msg.Text = "К какой кнопке добавим фото?"
+				msg.ReplyMarkup = buttonBase
+			case "Удалить все фото для кнопки":
+				stagekomand = "Удалить все фото для кнопки"
+				msg.Text = "У какой кнопки удалим все фотки?"
+				msg.ReplyMarkup = buttonBase
+			case "Добавить приветствие":
+				stagekomand = "Добавить приветствие"
+				sendDBGreetings, _ := dbgive.GiveDescriptionDBGreetings()
+				msg.Text = "Пришлите новое приветствие, высылаю вам шаблон старого:\n" + sendDBGreetings
 
+			case "К": // будет выводить список команд доступных чтобы не писать кнопки каждый раз вручную
+				{
+					msg.ReplyMarkup = comands
+					msg.Text = "Вот доступные команды:"
+				}
 			}
 
-		case "Обновить кнопку:":
-			if stagenameButtonTheUp == "" { // если название еще не ввели то мы запрашиваем кнопку А вот если ввели ниже
-				stagenameButtonTheUp = update.Message.Text // пишем какую кнопку будем обновлять
-				msg.Text = "Осталось написать новое название"
-			} else { // а вот если ввели то мы формируем простой запрос из пердыдущей и новой кнопки а так же очищаем наше "Состояние" Чтобы прога работала заново
-				answer := dbupdate.UpdateButton(stagenameButtonTheUp, update.Message.Text)
-				msg.Text = answer
-				//а теперь очистим наши состояния
-				stagekomand, stagenameButtonTheUp = "", "" // просто сделали их пустыми =)
-				comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
-				msg.ReplyMarkup = comands
+			if _, err := bot.Send(msg); err != nil {
+				fmt.Println(err)
 			}
 
-		}
-		//TODO сделать проверку вначале на есть ли такая кнопка в меню как бы регируем на запросы пользователей
-		//TODO Осталоь понять куда её засунуть =) вначале или в конце хммм
-		check_button := dbgive.CheckingdbButton(update.Message.Text)
-		if check_button == true {
-			resultDeascription := dbgive.GiveDescriptionButton(update.Message.Text)
-			msg.Text = resultDeascription + "вот и описание"
+		} else { // TODO Тут начинается проверка для пользователя и если такого запроса нет в бд Отправлять ему БД меню
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Такой кнопки мы не нашли, ниже я вам отправил список доступных Кнопок (услуг товаров) ") // для отправки копии смс
+			if stagekomand == "" {
+				buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase())) // формирует меню из кнопок базы которые увидит клиент //Важно что каждый раз нужно проверять в каждом сообщение
+				// все команды должны быьть внутри тк может произойти ошибка записи бд
+				if update.Message.Text == "/start" {
+					// тут реализовано если описания в базе нет то мы просто пришлем заглушку
+					sendDBGreetings, _ := dbgive.GiveDescriptionDBGreetings()
+					msg.Text = sendDBGreetings
+					msg.ReplyMarkup = buttonBase
+				} else {
+					check_button := dbgive.CheckingdbButton(update.Message.Text) // эта часть отвечает за поиск информации за кнопку если есть вернем тру
+					if check_button == true {
+						//TODO // чет вроде эта часть сломалась надо проверить
+						resultDeascription := dbgive.GiveDescriptionButton(update.Message.Text)
+						if resultDeascription != "" {
+							arr := dbgive.GivePhotoButton(update.Message.Text, resultDeascription)
+							if arr == nil {
+								msg.Text = resultDeascription
+								return
+							}
+							bot.Send(tgbotapi.NewMediaGroup(update.Message.Chat.ID, arr))
+						} else {
+							resultDeascription = "Нет описания и нет фото для этой кнопки"
+						}
+					} else {
+						buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase())) // формирует меню из кнопок базы которые увидит клиент //Важно что каждый раз нужно проверять в каждом сообщение
+						msg.ReplyMarkup = buttonBase
+					}
+				}
 
-		}
+			} else {
+				msg.Text = "Простите в данный момент добавляют информацию в Базу данных\n"
+			}
 
-		switch update.Message.Text { //для проверки пришедших команд смсок точнее ну будем дальше смотреть
-		case "Меню:":
-			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase()))
-			msg.ReplyMarkup = buttonBase
-			msg.Text = "Показываю доступное меню"
-			stagekomand, stagenameButtonTheUp = "", "" // просто сделали их пустыми =)
-		case "Добавить:":
-			stagekomand = "Добавить:"
-			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase()))
-			msg.ReplyMarkup = buttonBase
-			vartext := "Напишите название кнопки"
-			msg.Text = vartext
-		case "Удалить кнопку:":
-			stagekomand = "Удалить кнопку:"
-			msg.Text = "Какую кнопку удалить?"                                                        // отправлем смс
-			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase())) // отправляем меню для удаления
-			msg.ReplyMarkup = buttonBase
-		case "Удалить всё":
-			msg.Text = "Удалили данные"
-			dbdrop.DropAllTableBani()
-			comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
-			msg.ReplyMarkup = comands
-		case "Обновить кнопку:":
-			// обновляет значения кнопки
-			//vartext := update.Message.Text[28:]
-			//itog := dbdrop.DropOneButton(vartext)
-			stagekomand = "Обновить кнопку:"
-			msg.Text = "Какую кнопку обновим?" // передаю инфу в текст
-		case "Добавить описание кнопки:":
-			stagekomand = "Добавить описание кнопки:"
-			msg.Text = "К какой кнопке добавим описание?"
-			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase()))
-			msg.ReplyMarkup = buttonBase
-		case "Команды:": // будет выводить список команд доступных чтобы не писать кнопки каждый раз вручную
-			{
-				comands := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(comandsall))
-				msg.ReplyMarkup = comands
-				msg.Text = "Вот доступные команды:"
+			if _, err := bot.Send(msg); err != nil {
+				fmt.Println(err)
 			}
 		}
 
-		if _, err := bot.Send(msg); err != nil {
-			fmt.Println(err)
-		}
 	}
 }
