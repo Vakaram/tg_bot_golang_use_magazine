@@ -2,45 +2,44 @@ package update
 
 import (
 	"database/sql"
-	"fmt"
 	_ "github.com/mattn/go-sqlite3"
+	logger "tg_bot_golang/logger"
 )
 
 func AddDescriptionInButton(button string, newDescription string) string {
 	database, err := sql.Open("sqlite3", "./info.db")
-	//if err != nil {
-	//	fmt.Printf("Ошибка подключение в AddButton  %s \n", err)
-	//}
+	if err != nil {
+		errStr := "AddDescriptionInButton() Ошибка при подключение к бд: " + err.Error() // err.Error() переводим ошибку в строку
+		logger.Error.Println(errStr)
+	}
 	defer database.Close()
 
 	statement, err := database.Prepare("UPDATE myDb SET description=newDescription WHERE button = button VALUES (?,?) ") //statement - заявление перевод
 	if err != nil {
-		fmt.Printf("Ошибка добавление кнопокв в AddButton в   %s \n", err)
+		errStr := "AddDescriptionInButton() Ошибка Update описания для кнопки: " + err.Error() // err.Error() переводим ошибку в строку
+		logger.Error.Println(errStr)
 	}
 	statement.Exec(newDescription, button)
-
+	logger.Info.Println("AddDescriptionInButton() Успешно обновили описание к кнопке")
 	return "Добавил описание "
 
 }
 
 func UpdateButton(whichButton string, newButton string) string { // будет обновлять только однку кнопку не трогая описание
 	database, err := sql.Open("sqlite3", "./info.db")
-
-	//TODO а так же сделать проверку на кнопку есть ли такая кнопка в базе и если что возвращать ошибку что нет такой кнопки
 	if err != nil {
-		fmt.Printf("Ошибка подключение в UpdateButton  %s \n", err)
+		errStr := "UpdateButton() Ошибка при подключение к бд: " + err.Error() // err.Error() переводим ошибку в строку
+		logger.Error.Println(errStr)
 	}
+
 	defer database.Close()
 
+	_, err = database.Exec("UPDATE myDb SET button=? WHERE button=?", newButton, whichButton) // пока пойдет и эта часть потом обновим если надобу дет
 	if err != nil {
-		fmt.Printf("Ошибка добавление кнопокв в UpdateButton в   %s \n", err)
+		errStr := "UpdateButton() Ошибка Update описания для кнопки: " + err.Error() // err.Error() переводим ошибку в строку
+		logger.Error.Println(errStr)
 	}
-
-	result, errorka := database.Exec("UPDATE myDb SET button=? WHERE button=?", newButton, whichButton) // пока пойдет и эта часть потом обновим если надобу дет
-	if errorka == nil {
-		fmt.Printf("\n Результат запроса такой %s. А вот ошибка такая  %s ", result, errorka)
-
-	}
+	logger.Info.Println("UpdateButton() Успешно обновили название к кнопке")
 
 	return "Обновили кнопку: " + whichButton + " На: " + newButton
 
@@ -49,25 +48,33 @@ func UpdateButton(whichButton string, newButton string) string { // будет �
 func UpdateDescriptionButton(button string, description string) string { //Добавить возможность добовлять описание кнопок
 	database, err := sql.Open("sqlite3", "./info.db")
 	if err != nil {
-		fmt.Printf("Ошибка подключение в AddDescriptionButton  %s \n", err)
+		errStr := "UpdateDescriptionButton() Ошибка при подключение к бд: " + err.Error() // err.Error() переводим ошибку в строку
+		logger.Error.Println(errStr)
 	}
 	defer database.Close()
+
+	_, err = database.Exec("UPDATE myDb SET description=? WHERE button=?", description, button) // пока пойдет и эта часть потом обновим если надобу дет
 	if err != nil {
-		fmt.Printf("Ошибка добавление кнопокв в AddDescriptionButton в   %s \n", err)
+		errStr := "UpdateDescriptionButton() Ошибка при Update описанияк кнопке: " + err.Error() // err.Error() переводим ошибку в строку
+		logger.Error.Println(errStr)
 	}
-	result, errorka := database.Exec("UPDATE myDb SET description=? WHERE button=?", description, button) // пока пойдет и эта часть потом обновим если надобу дет
-	fmt.Printf("\n Результат запроса такой %s. А вот ошибка такая  %s ", result, errorka)
+	logger.Info.Println("UpdateDescriptionButton() Успешно обновили название к кнопке")
+
 	return "Успешно добавили описание к кнопке проверяй"
 }
 
 func UpdateAddPhotoInButton(button string, stringPhotoId string) string { // добоавляет по одной фотке к тому что есть + забирает все фотки которые были и добавляет.
 	database, err := sql.Open("sqlite3", "./info.db")
 	if err != nil {
-		fmt.Printf("Ошибка подключение в AddButton  %s \n", err)
+		errStr := "UpdateAddPhotoInButton() Ошибка при подключение к бд: " + err.Error() // err.Error() переводим ошибку в строку
+		logger.Error.Println(errStr)
 	}
 	defer database.Close()
-	// TODO взять инфо из базы и добавить к ней еще одно фото =)
-	result, _ := database.Query("SELECT photo FROM myDb WHERE button=?", button) // пока пойдет и эта часть потом обновим если надобу дет
+	result, err := database.Query("SELECT photo FROM myDb WHERE button=?", button) // пока пойдет и эта часть потом обновим если надобу дет
+	if err != nil {
+		errStr := "UpdateAddPhotoInButton() Ошибка при запросе фотографии из базы данных: " + err.Error() // err.Error() переводим ошибку в строку
+		logger.Error.Println(errStr)
+	}
 	var photoitog string
 	var photoval string
 	for result.Next() {
@@ -80,22 +87,33 @@ func UpdateAddPhotoInButton(button string, stringPhotoId string) string { // д�
 	if len(str) > 0 {
 		if str[len(str)-1] == ',' {
 			stringPhotoId = str + stringPhotoId + ","
-			result, errorka := database.Exec("UPDATE myDb SET photo=? WHERE button=?", stringPhotoId, button) // пока пойдет и эта часть потом обновим если надобу дет
-			fmt.Printf("\n Результат запроса такой при добавление кнопки %s. А вот ошибка такая  %s ", result, errorka)
-			fmt.Printf("Отправим данные старые + новые : %s", stringPhotoId)
+			_, err = database.Exec("UPDATE myDb SET photo=? WHERE button=?", stringPhotoId, button) // пока пойдет и эта часть потом обновим если надобу дет
+			if err != nil {
+				errStr := "UpdateAddPhotoInButton() Ошибка Update фоток к кнопке: " + err.Error() // err.Error() переводим ошибку в строку
+				logger.Error.Println(errStr)
+			}
+			logger.Info.Println("UpdateAddPhotoInButton() Успешно добавили фотографию к тем что были")
+
 			return "Добавил еще одну фотографию к тем которые были"
 		} else { // проверка если запятой в конце нет по какой то причине то мы возьмем да и допишем эту запятую в конец встроки
 			stringPhotoId = str + "," + stringPhotoId + ","
-			result, errorka := database.Exec("UPDATE myDb SET photo=? WHERE button=?", stringPhotoId, button) // пока пойдет и эта часть потом обновим если надобу дет
-			fmt.Printf("\n Результат запроса такой при добавление кнопки %s. А вот ошибка такая  %s ", result, errorka)
-			fmt.Printf("Отправим данные старые + новые : %s", stringPhotoId)
+			_, err = database.Exec("UPDATE myDb SET photo=? WHERE button=?", stringPhotoId, button) // пока пойдет и эта часть потом обновим если надобу дет
+			if err != nil {
+				errStr := "UpdateAddPhotoInButton() Ошибка Update фоток к кнопке: " + err.Error() // err.Error() переводим ошибку в строку
+				logger.Error.Println(errStr)
+			}
+			logger.Info.Println("UpdateAddPhotoInButton() Успешно Добавил еще одну фотографию к тем которые были")
+
 			return "Добавил еще одну фотографию к тем которые были"
 		}
 	} else {
 		stringPhotoId = stringPhotoId + ","
-		database.Exec("UPDATE myDb SET photo=? WHERE button=?", stringPhotoId, button) // пока пойдет и эта часть потом обновим если надобу дет
-		//result, errorka := эта часть для строки выше нужна
-		//fmt.Printf("\n Результат запроса такой при добавление кнопки %s. А вот ошибка такая  %s ", result, errorka)
+		_, err = database.Exec("UPDATE myDb SET photo=? WHERE button=?", stringPhotoId, button) // пока пойдет и эта часть потом обновим если надобу дет
+		if err != nil {
+			errStr := "UpdateAddPhotoInButton() Ошибка Update фоток к кнопке: " + err.Error() // err.Error() переводим ошибку в строку
+			logger.Error.Println(errStr)
+		}
+		logger.Info.Println("UpdateAddPhotoInButton() Успешно Добавил фото,фото раньше не было")
 		return "Добавил фото,фото раньше не было"
 	}
 
@@ -104,14 +122,17 @@ func UpdateAddPhotoInButton(button string, stringPhotoId string) string { // д�
 func UpdateDbGreetings(UpdateDbGreetings string) string { //Добавить возможность добовлять описание кнопок
 	database, err := sql.Open("sqlite3", "./info.db")
 	if err != nil {
-		fmt.Printf("Ошибка подключение в AddDescriptionButton  %s \n", err)
+		errStr := "UpdateDbGreetings() Ошибка поключение к бд: " + err.Error() // err.Error() переводим ошибку в строку
+		logger.Error.Println(errStr)
 	}
 	defer database.Close()
-	if err != nil {
-		fmt.Printf("Ошибка добавление кнопокв в AddDescriptionButton в   %s \n", err)
-	}
+
 	firsid := 1
-	result, errorka := database.Exec("UPDATE DbGreetings SET Greetings=? WHERE id=?", UpdateDbGreetings, firsid) // пока пойдет и эта часть потом обновим если надобу дет
-	fmt.Printf("\n Результат запроса такой %s. А вот ошибка такая  %s ", result, errorka)
+	_, err = database.Exec("UPDATE DbGreetings SET Greetings=? WHERE id=?", UpdateDbGreetings, firsid) // пока пойдет и эта часть потом обновим если надобу дет
+	if err != nil {
+		errStr := "UpdateDbGreetings() апдейта описания приветствия в таблице DbGreetings: " + err.Error() // err.Error() переводим ошибку в строку
+		logger.Error.Println(errStr)
+	}
+	logger.Info.Println("Успешно добавили приветствие проверить можно отправив команду /start в роли пользователя а не админа")
 	return "Успешно добавили приветствие проверить можно отправив команду /start в роли пользователя а не админа"
 }

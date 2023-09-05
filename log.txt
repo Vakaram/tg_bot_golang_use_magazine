@@ -1,0 +1,185 @@
+WARNING: 2023/09/04 10:27:24 main.go:23: This is an information message.
+WARNING: 2023/09/04 10:37:08 main.go:23: This is an information message.
+INFO: 2023/09/04 10:37:08 main.go:24: This is an information message.
+WARNING: 2023/09/04 11:37:58 main.go:23: This is an information message.
+INFO: 2023/09/04 11:37:58 main.go:24: This is an information message.
+INFO: 2023/09/04 11:37:58 createTable.go:25: Успешно создали базу данных 
+INFO: 2023/09/04 11:37:58 createTable.go:68: Создали базу для приветствия
+INFO: 2023/09/04 11:37:58 createTable.go:109:  СreateDBAdministrators () Успешно создали базу для админов все ок
+WARNING: 2023/09/05 00:52:29 main.go:23: This is an information message.
+INFO: 2023/09/05 00:52:29 main.go:24: This is an information message.
+INFO: 2023/09/05 00:52:29 createTable.go:25: Успешно создали базу данных 
+INFO: 2023/09/05 00:52:29 createTable.go:68: Создали базу для приветствия
+INFO: 2023/09/05 00:52:29 createTable.go:109:  СreateDBAdministrators () Успешно создали базу для админов все ок
+WARNING: 2023/09/05 00:52:51 main.go:23: This is an information message.
+INFO: 2023/09/05 00:52:51 main.go:24: This is an information message.
+INFO: 2023/09/05 00:52:51 createTable.go:25: Успешно создали базу данных 
+INFO: 2023/09/05 00:52:51 createTable.go:68: Создали базу для приветствия
+INFO: 2023/09/05 00:52:51 createTable.go:109:  СreateDBAdministrators () Успешно создали базу для админов все ок
+INFO: 2023/09/05 01:45:57 createTable.go:25: Успешно создали базу данных 
+INFO: 2023/09/05 01:45:57 createTable.go:68: Создали базу для приветствия
+INFO: 2023/09/05 01:45:57 createTable.go:109:  СreateDBAdministrators () Успешно создали базу для админов все ок
+INFO: 2023/09/05 01:46:03 main.go:81: Получили запрос такой fe От пользователя с id = 1484570227
+INFO: 2023/09/05 01:46:03 giveInfoDB.go:239: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 01:46:03 main.go:97: Получили запрос такой feДа это админ = 1484570227
+INFO: 2023/09/05 01:46:03 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 01:46:03 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 01:46:03 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 01:46:05 main.go:81: Получили запрос такой ау От пользователя с id = 1484570227
+INFO: 2023/09/05 01:46:05 giveInfoDB.go:239: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 01:46:05 main.go:97: Получили запрос такой ауДа это админ = 1484570227
+INFO: 2023/09/05 01:46:05 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 01:46:05 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 01:46:05 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 01:46:07 main.go:81: Получили запрос такой рабтаешь От пользователя с id = 1484570227
+INFO: 2023/09/05 01:46:07 giveInfoDB.go:239: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 01:46:07 main.go:97: Получили запрос такой рабтаешьДа это админ = 1484570227
+INFO: 2023/09/05 01:46:07 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 01:46:07 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 01:46:07 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 01:46:09 main.go:81: Получили запрос такой эээ прога =) От пользователя с id = 1484570227
+INFO: 2023/09/05 01:46:09 giveInfoDB.go:239: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 01:46:09 main.go:97: Получили запрос такой эээ прога =)Да это админ = 1484570227
+INFO: 2023/09/05 01:46:09 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 01:46:09 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 01:46:09 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 01:46:11 main.go:81: Получили запрос такой К От пользователя с id = 1484570227
+INFO: 2023/09/05 01:46:11 giveInfoDB.go:239: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 01:46:11 main.go:97: Получили запрос такой КДа это админ = 1484570227
+INFO: 2023/09/05 01:46:11 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 01:46:11 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 01:46:11 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 01:46:13 main.go:81: Получили запрос такой хы От пользователя с id = 1484570227
+INFO: 2023/09/05 01:46:13 giveInfoDB.go:239: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 01:46:13 main.go:97: Получили запрос такой хыДа это админ = 1484570227
+INFO: 2023/09/05 01:46:13 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 01:46:13 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 01:46:13 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 02:00:31 createTable.go:25: Успешно создали базу данных 
+INFO: 2023/09/05 02:00:31 createTable.go:68: Создали базу для приветствия
+INFO: 2023/09/05 02:00:31 createTable.go:109:  СreateDBAdministrators () Успешно создали базу для админов все ок
+INFO: 2023/09/05 02:00:31 main.go:80: Получили запрос такой Меню От пользователя с id = 1484570227
+INFO: 2023/09/05 02:00:31 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:00:31 main.go:95: Получили запрос такой Меню Да это админ = 1484570227
+INFO: 2023/09/05 02:00:31 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:00:31 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:00:31 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 02:00:55 main.go:80: Получили запрос такой Баня От пользователя с id = 1484570227
+INFO: 2023/09/05 02:00:55 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:00:55 main.go:95: Получили запрос такой Баня Да это админ = 1484570227
+INFO: 2023/09/05 02:00:55 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:00:55 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:00:55 giveInfoDB.go:64: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопка есть
+INFO: 2023/09/05 02:00:55 giveInfoDB.go:99: GiveDescriptionButton() Успешно получили описание к кнопке =)
+INFO: 2023/09/05 02:00:55 giveInfoDB.go:145: GiveDescriptionButton() Успешно получили фотки по кнопке =)
+INFO: 2023/09/05 02:01:06 main.go:80: Получили запрос такой К От пользователя с id = 1484570227
+INFO: 2023/09/05 02:01:06 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:01:06 main.go:95: Получили запрос такой К Да это админ = 1484570227
+INFO: 2023/09/05 02:01:06 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:01:06 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:01:06 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 02:02:10 main.go:80: Получили запрос такой Добавить описание От пользователя с id = 1484570227
+INFO: 2023/09/05 02:02:10 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:02:10 main.go:95: Получили запрос такой Добавить описание Да это админ = 1484570227
+INFO: 2023/09/05 02:02:10 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:02:10 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:02:10 giveInfoDB.go:64: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопка есть
+INFO: 2023/09/05 02:02:10 giveInfoDB.go:99: GiveDescriptionButton() Успешно получили описание к кнопке =)
+INFO: 2023/09/05 02:02:12 main.go:80: Получили запрос такой Баня От пользователя с id = 1484570227
+INFO: 2023/09/05 02:02:12 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:02:12 main.go:95: Получили запрос такой Баня Да это админ = 1484570227
+INFO: 2023/09/05 02:02:12 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:02:12 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:02:12 giveInfoDB.go:99: GiveDescriptionButton() Успешно получили описание к кнопке =)
+INFO: 2023/09/05 02:02:20 main.go:80: Получили запрос такой Баня топ От пользователя с id = 1484570227
+INFO: 2023/09/05 02:02:20 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:02:20 main.go:95: Получили запрос такой Баня топ Да это админ = 1484570227
+INFO: 2023/09/05 02:02:20 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:02:20 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:02:20 update.go:61: UpdateDescriptionButton() Успешно обновили название к кнопке
+INFO: 2023/09/05 02:02:20 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 02:02:21 main.go:80: Получили запрос такой Меню От пользователя с id = 1484570227
+INFO: 2023/09/05 02:02:21 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:02:21 main.go:95: Получили запрос такой Меню Да это админ = 1484570227
+INFO: 2023/09/05 02:02:21 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:02:21 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:02:21 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 02:02:23 main.go:80: Получили запрос такой Баня От пользователя с id = 1484570227
+INFO: 2023/09/05 02:02:23 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:02:23 main.go:95: Получили запрос такой Баня Да это админ = 1484570227
+INFO: 2023/09/05 02:02:23 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:02:23 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:02:23 giveInfoDB.go:64: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопка есть
+INFO: 2023/09/05 02:02:23 giveInfoDB.go:99: GiveDescriptionButton() Успешно получили описание к кнопке =)
+INFO: 2023/09/05 02:02:23 giveInfoDB.go:145: GiveDescriptionButton() Успешно получили фотки по кнопке =)
+INFO: 2023/09/05 02:02:30 main.go:80: Получили запрос такой К От пользователя с id = 1484570227
+INFO: 2023/09/05 02:02:30 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:02:30 main.go:95: Получили запрос такой К Да это админ = 1484570227
+INFO: 2023/09/05 02:02:30 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:02:30 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:02:30 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 02:03:14 main.go:80: Получили запрос такой Стоп От пользователя с id = 1484570227
+INFO: 2023/09/05 02:03:14 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:03:14 main.go:95: Получили запрос такой Стоп Да это админ = 1484570227
+INFO: 2023/09/05 02:03:14 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:03:14 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:03:14 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 02:03:18 main.go:80: Получили запрос такой Стоп От пользователя с id = 1484570227
+INFO: 2023/09/05 02:03:18 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:03:18 main.go:95: Получили запрос такой Стоп Да это админ = 1484570227
+INFO: 2023/09/05 02:03:18 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:03:18 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:03:18 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 02:03:23 main.go:80: Получили запрос такой Стоп От пользователя с id = 1484570227
+INFO: 2023/09/05 02:03:23 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:03:23 main.go:95: Получили запрос такой Стоп Да это админ = 1484570227
+INFO: 2023/09/05 02:03:23 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:03:23 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:03:23 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 02:04:26 main.go:80: Получили запрос такой Удалить администратора От пользователя с id = 1484570227
+INFO: 2023/09/05 02:04:26 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:04:26 main.go:95: Получили запрос такой Удалить администратора Да это админ = 1484570227
+INFO: 2023/09/05 02:04:26 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:04:26 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:04:26 giveInfoDB.go:64: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопка есть
+INFO: 2023/09/05 02:04:26 giveInfoDB.go:99: GiveDescriptionButton() Успешно получили описание к кнопке =)
+INFO: 2023/09/05 02:04:26 giveInfoDB.go:269: GiveDBAdministratorsIDAdmin() Успешно запросили админов с их описанием из базы 
+INFO: 2023/09/05 02:05:03 main.go:80: Получили запрос такой 3 От пользователя с id = 1484570227
+INFO: 2023/09/05 02:05:03 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:05:03 main.go:95: Получили запрос такой 3 Да это админ = 1484570227
+INFO: 2023/09/05 02:05:03 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:05:03 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:05:03 giveInfoDB.go:296: GiveDBAdministratorsChecID() Успешно запросили админов  
+INFO: 2023/09/05 02:05:03 dropAllTableBani.go:98: DropOneAdmin() Администратора с таким id нет в базе данных ID= 3
+INFO: 2023/09/05 02:05:07 main.go:80: Получили запрос такой К От пользователя с id = 1484570227
+INFO: 2023/09/05 02:05:07 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:05:07 main.go:95: Получили запрос такой К Да это админ = 1484570227
+INFO: 2023/09/05 02:05:07 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:05:07 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:05:07 giveInfoDB.go:296: GiveDBAdministratorsChecID() Успешно запросили админов  
+INFO: 2023/09/05 02:05:07 dropAllTableBani.go:98: DropOneAdmin() Администратора с таким id нет в базе данных ID= К
+INFO: 2023/09/05 02:17:12 main.go:80: Получили запрос такой Меню От пользователя с id = 1484570227
+INFO: 2023/09/05 02:17:12 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:17:12 main.go:95: Получили запрос такой Меню Да это админ = 1484570227
+INFO: 2023/09/05 02:17:12 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:17:12 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:17:12 giveInfoDB.go:296: GiveDBAdministratorsChecID() Успешно запросили админов  
+INFO: 2023/09/05 02:17:12 dropAllTableBani.go:98: DropOneAdmin() Администратора с таким id нет в базе данных ID= Меню
+INFO: 2023/09/05 02:17:21 main.go:80: Получили запрос такой Меню От пользователя с id = 1484570227
+INFO: 2023/09/05 02:17:21 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:17:21 main.go:95: Получили запрос такой Меню Да это админ = 1484570227
+INFO: 2023/09/05 02:17:21 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:17:21 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:17:21 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 02:17:39 main.go:80: Получили запрос такой К От пользователя с id = 1484570227
+INFO: 2023/09/05 02:17:39 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:17:39 main.go:95: Получили запрос такой К Да это админ = 1484570227
+INFO: 2023/09/05 02:17:39 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:17:39 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:17:39 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 
+INFO: 2023/09/05 02:17:58 main.go:80: Получили запрос такой /start От пользователя с id = 1484570227
+INFO: 2023/09/05 02:17:58 giveInfoDB.go:235: GiveDBAdministratorsIDAdmin() Успешно запросили админов из базы 
+INFO: 2023/09/05 02:17:58 main.go:95: Получили запрос такой /start Да это админ = 1484570227
+INFO: 2023/09/05 02:17:58 giveInfoDB.go:35: GiveButtonInBase() Успешно получили данные из базы для создания лкавиаутыры меню 
+INFO: 2023/09/05 02:17:58 CreateButton.go:26: CreateButton() сработал его вызвали все ок:
+INFO: 2023/09/05 02:17:58 giveInfoDB.go:69: GiveButtonInBase() Успешно проверили в базу на наличие кнопки , кнопки нет такой 

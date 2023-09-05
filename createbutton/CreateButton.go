@@ -1,6 +1,9 @@
 package createbutton
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+import (
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	logger "tg_bot_golang/logger"
+)
 
 func CreateButton(arrayButton []string) []tgbotapi.KeyboardButton { // получает массив значений и выдает кнопки меню для тг
 	var itog []tgbotapi.KeyboardButton
@@ -19,6 +22,7 @@ func CreateButton(arrayButton []string) []tgbotapi.KeyboardButton { // полу�
 	for _, v := range arrayButton {
 		itog = append(itog, tgbotapi.NewKeyboardButton(v))
 	}
-
+	errStr := "CreateButton() сработал его вызвали все ок:" // err.Error() переводим ошибку в строку
+	logger.Info.Println(errStr)
 	return itog
 }

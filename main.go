@@ -1,14 +1,9 @@
 package main
 
-// TODO Сделать команду которая очищает все состояния то есть очищает переменныые stagekomand и nameButtonTheUp
 import (
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/sirupsen/logrus"
-	_ "github.com/sirupsen/logrus"
-	"log"
-	"os"
 	"strconv"
 	btcreate "tg_bot_golang/createbutton"
 	dbadd "tg_bot_golang/db/adddate"
@@ -16,38 +11,24 @@ import (
 	dbdrop "tg_bot_golang/db/drop"
 	dbgive "tg_bot_golang/db/give"
 	dbupdate "tg_bot_golang/db/update"
+	"tg_bot_golang/logger"
 )
 
 func Info(data []string) {
 	fmt.Printf("%s получаю из получение кнопок", data)
 }
+
 func main() {
-	// настраиваем логгер думаю нужно будет перенести это в функцию
-	// Создаем файл для записи логов
-	file, err := os.OpenFile("logfile.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	// Создаем новый логгер Logrus
-	logger := logrus.New()
-
-	// Устанавливаем выходной поток для логгера на созданный файл
-	logger.SetOutput(file)
-
-	// Теперь можно использовать методы логгера, такие как Info, Warn, Error и т. д.,
-	// для записи данных в файл
-	logger.Info("Это мы запустили бота или перезапустили =) ")
-	//logger.Warn("Это предупреждение в лог-файле с использованием Logrus")
-
-	///////////////////
-
+	//logger.CrateLogger()
 	const chiefadminBot string = "1484570227" // эта запись нужна для телеграм бота чтобы так добавился главный администратор который моэет добавлять других администраторов
-
-	dbcreate.СreatemyDb() // создаем нашу базу на новом месте =)
+	bot, err := tgbotapi.NewBotAPI("5975063523:AAFagQJfXf3z-zgA0JjHPusoGhjjXIYOyEI")
+	if err != nil {
+		fmt.Printf(err.Error())
+	}
+	dbcreate.СreatemyDB() // создаем нашу базу на новом месте =)
 	dbcreate.СreateDbGreetings()
 	dbcreate.СreateDBAdministrators(chiefadminBot)
+	//logger.LoggerInfo("Новый запуск тесссст ")
 
 	//Тут создаем набор команд он часто вызывается будет как константа
 	var comands = tgbotapi.NewReplyKeyboard(
@@ -87,12 +68,7 @@ func main() {
 	var stagekomand string          // будет пустая команда если заполнена будем её затирать если используем // для машин стостояния
 	var stagenameButtonTheUp string // типа тут мы обновим кнопку на это навание // для id
 
-	bot, err := tgbotapi.NewBotAPI("5975063523:AAFagQJfXf3z-zgA0JjHPusoGhjjXIYOyEI")
-	if err != nil {
-		log.Panic(err)
-	}
 	bot.Debug = true
-	log.Printf("Authorized on account %s", bot.Self.UserName)
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 20 // сколько будем ждать запрос ?
 	updates := bot.GetUpdatesChan(u)
@@ -101,9 +77,9 @@ func main() {
 		if update.Message == nil { // ignore non-Message updates
 			continue
 		}
-		logger.Info("Такое сообщение нам прислали: " + "'" + update.Message.Text + "'" + " Nick: " + update.Message.From.UserName + " ID : " + strconv.Itoa(int(update.Message.From.ID)))
 
-		// TODO делаю проверку на админа
+		logger.Info.Println("Получили запрос такой " + update.Message.Text + " От пользователя с id = " + strconv.Itoa(int(update.Message.From.ID)))
+
 		//тут получаем всех админов и делаем сравнение с ними
 		admins := dbgive.GiveDBAdministratorsIDAdmin()
 		fmt.Printf("Вот что получаю из базы админов : %s\n", admins[0])
@@ -117,10 +93,11 @@ func main() {
 		fmt.Printf("Реально ли это админ ?:  %t \n", reallyAdmin)
 
 		if reallyAdmin == true {
+			logger.Info.Println("Получили запрос такой " + update.Message.Text + " Да это админ = " + strconv.Itoa(int(update.Message.From.ID)))
 
 			buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase())) // формирует меню из кнопок базы которые увидит клиент //Важно что каждый раз нужно проверять в каждом сообщение
 
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Программа отвечает") // для отправки копии смс
+			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "") // для отправки копии смс
 
 			switch stagekomand { //для проверки пришедших команд смсок точнее ну будем дальше смотреть
 			case "Добавить кнопку":
@@ -137,7 +114,6 @@ func main() {
 			case "Добавить приветствие":
 				stagekomand = "" // удаляем состояние
 				//пердаем новое приветствие в бд
-				//TODO // вот тут будет функция update для приветсвтия
 				updateData := dbupdate.UpdateDbGreetings(update.Message.Text)
 				if updateData != "" {
 					msg.Text = updateData
@@ -150,7 +126,6 @@ func main() {
 			case "Удалить все фото для кнопки":
 				stagekomand = ""
 				// тут должна быть функцию удаления
-				//TODO кнопка у которой будем удалять функция
 				dropPhotoAll := dbdrop.DropAllPhotoButton(update.Message.Text)
 				msg.Text = dropPhotoAll
 				msg.ReplyMarkup = comands
@@ -212,13 +187,10 @@ func main() {
 					msg.ReplyMarkup = comands
 				}
 			}
-			//TODO сделать проверку вначале на есть ли такая кнопка в меню как бы регируем на запросы пользователей
-			//TODO Осталоь понять куда её засунуть =) вначале или в конце хммм
 
 			if stagekomand == "" {
 				check_button := dbgive.CheckingdbButton(update.Message.Text) // эта часть отвечает за поиск информации за кнопку если есть вернем тру
 				if check_button == true {
-					//TODO // чет вроде эта часть сломалась надо проверить
 					resultDeascription := dbgive.GiveDescriptionButton(update.Message.Text)
 					if resultDeascription != "" {
 						arr := dbgive.GivePhotoButton(update.Message.Text, resultDeascription)
@@ -265,7 +237,6 @@ func main() {
 				msg.Text = vartext
 			case "Удалить администратора":
 				stagekomand = "Удалить администратора"
-				//Todo тут нужно отсылать администраторов и текст что для удаления пришлите цифру id администратора для удаления
 				vartext := dbgive.GiveDBAdministratorsPrimaryKeyIDAdmiName() + "Пришлите № администратор для удаления"
 				msg.Text = vartext
 			case "Удалить кнопку":
@@ -309,7 +280,8 @@ func main() {
 				fmt.Println(err)
 			}
 
-		} else { // TODO Тут начинается проверка для пользователя и если такого запроса нет в бд Отправлять ему БД меню
+		} else { //
+			logger.Info.Println("Получили запрос такой " + update.Message.Text + "Нет это не админ = " + strconv.Itoa(int(update.Message.From.ID)))
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Такой кнопки мы не нашли, ниже я вам отправил список доступных Кнопок (услуг товаров) ") // для отправки копии смс
 			if stagekomand == "" {
 				buttonBase := tgbotapi.NewReplyKeyboard(btcreate.CreateButton(dbgive.GiveButtonInBase())) // формирует меню из кнопок базы которые увидит клиент //Важно что каждый раз нужно проверять в каждом сообщение
@@ -322,7 +294,7 @@ func main() {
 				} else {
 					check_button := dbgive.CheckingdbButton(update.Message.Text) // эта часть отвечает за поиск информации за кнопку если есть вернем тру
 					if check_button == true {
-						//TODO // чет вроде эта часть сломалась надо проверить
+						//
 						resultDeascription := dbgive.GiveDescriptionButton(update.Message.Text)
 						if resultDeascription != "" {
 							arr := dbgive.GivePhotoButton(update.Message.Text, resultDeascription)
