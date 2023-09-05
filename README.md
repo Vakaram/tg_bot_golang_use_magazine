@@ -1,4 +1,7 @@
 # tg_bot_golang_use_magazine
+<h1 align="center">Hi there, I'm Vakaram</a> 
+
+
 Доброго всем времени суток \n
 Бот сделан по принципу конструктора
 Например вы продаете кросовки 
